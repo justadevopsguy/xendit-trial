@@ -1,0 +1,42 @@
+## mysql image version
+image: "percona/percona-server-mongodb"
+imageTag: "3.4.15"
+imagePullPolicy: Always
+
+## Persist data to a persistent volume
+persistence:
+  enabled: true
+  persistentVolumeReclaimPolicy: "Retain"
+  storageClass: "standard"
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  annotations: {}
+
+  internalTunnel:
+    enabled: false
+
+## Configure resource requests and limits
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m
+  limits:
+    memory: 1Gi
+    cpu: 200m
+
+## Configure the service
+service:
+  type: ClusterIP
+  port: 27017
+  targetPort: 27017
+  name: mongo
+  # nodePort: 32000
+  internalTunnel:
+    enabled: false
+
+# Define objects to mount
+tzcountry: /usr/share/zoneinfo/Asia/Saigon
+tzpath: /etc/localtime
+
+# To be added to the database server pod(s)
+podAnnotations: {}

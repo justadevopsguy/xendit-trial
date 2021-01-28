@@ -1,0 +1,38 @@
+## Image Details
+image: ajquiambao/xendit:1.0
+imagePullPolicy: Always
+
+## Specify no. of replicas. Check that app/service supports multiple instances.
+replicaCount: 1
+
+## Configure the service
+service:
+  name: tcp-8080
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+  internalTunnel:
+    enabled: false
+
+## Configure resource requests and limits--> is this final? ask dev...
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m
+  limits:
+    cpu: "1"
+    memory: 500Mi
+
+# Specify ENV Variables
+envs:
+  NAME: "aj"
+  MONGO_HOST: "nosql-stg-database.xendit-trial.svc.cluster.local"
+
+# Define objects to mount
+tzcountry: /usr/share/zoneinfo/Asia/Saigon
+tzpath: /etc/localtime
+
+## To be added to the database server pod(s)
+podAnnotations: {}
+
+environment: xendit-trial

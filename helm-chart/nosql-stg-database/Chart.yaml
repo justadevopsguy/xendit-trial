@@ -1,0 +1,14 @@
+name: nosql-stg-database
+version: 0.10.1
+appVersion: 3.4.15
+description:
+  Fast, reliable, scalable, and easy to use open-source non-relational database
+  system.
+keywords:
+  - database
+  - sql
+sources:
+maintainers:
+  - name: AJ Quiambao
+    email: ajquiambao011@gmail.com
+engine: gotpl

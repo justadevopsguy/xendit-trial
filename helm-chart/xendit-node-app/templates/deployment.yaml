@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "xendit-node-app.fullname" . }}
+  namespace: {{ .Values.environment }}
+  labels:
+    app: {{ template "xendit-node-app.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app:  {{ template "xendit-node-app.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "xendit-node-app.fullname" . }}
+{{- with .Values.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ template "xendit-node-app.fullname" . }}
+        image: "{{ .Values.image }}"
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 35 
+          periodSeconds: 20
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 40
+          periodSeconds: 20
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        env:
+        {{- if .Values.envs.NAME }}
+        - name: NAME
+          value: {{ .Values.envs.NAME | quote }}
+        {{- end }}
+        {{- if .Values.envs.MONGO_HOST }}
+        - name: MONGO_HOST
+          value: {{ .Values.envs.MONGO_HOST | quote }}
+        {{- end }}
+        ports:
+        - name: {{ .Values.service.name }}
+          containerPort: {{ .Values.service.targetPort }}
+        volumeMounts:
+        - name: tz-config
+          mountPath: {{ .Values.tzpath | quote }}
+      priorityClassName: {{ .Values.priorityClass }}
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: {{ .Values.tzcountry }}

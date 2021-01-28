@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nosql-stg-database.fullname" . }}
+  labels:
+    app: {{ template "nosql-stg-database.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app:  {{ template "nosql-stg-database.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nosql-stg-database.fullname" . }}
+{{- with .Values.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ template "nosql-stg-database.fullname" . }}
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        args: ['--config','/etc/mongod.conf']
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        env:
+        ports:
+        - name: {{ .Values.service.name }}
+          containerPort: {{ .Values.service.targetPort }}
+        volumeMounts:
+        - name: config
+          subPath: mongod.conf
+          mountPath: /etc/mongod.conf
+        - name: tz-config
+          mountPath: {{ .Values.tzpath | quote }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "nosql-stg-database.fullname" . }}-config
+      - name: tz-config
+        hostPath:
+          path: {{ .Values.tzcountry }}

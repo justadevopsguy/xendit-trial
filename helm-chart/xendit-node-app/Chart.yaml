@@ -1,0 +1,13 @@
+name: xendit-node-app
+version: 0.10.1
+appVersion: 1.0.0
+description: .
+keywords:
+- tomcat
+home: http://url
+icon:
+sources:
+maintainers:
+- name: AJ Quiambao
+  email: ajquiambao011@gmail.com
+engine: gotpl
