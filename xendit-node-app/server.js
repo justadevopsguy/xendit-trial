@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
   const getCPUUsageResponse = `Current CPU usage is ${cpuPercent}%`;
   const getMemoryUsageResponse = `Current Memory usage ${Math.round(usedMemory * 100) / 100} MB`;
 
-  res.send(osResponse);
+  res.send(osResponse + '<br>' + trialResponse);
 });
 
 app.listen(port);
