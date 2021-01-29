@@ -17,4 +17,4 @@ spec:
     nodePort: {{ .Values.service.nodePort }}
     {{- end }}
   selector:
-    app: {{ template "xendit-node-app.fullname" . }}
+    app: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
