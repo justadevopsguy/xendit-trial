@@ -1,21 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "xendit-node-app.fullname" . }}
+  name: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
   namespace: {{ .Values.environment }}
   labels:
-    app: {{ template "xendit-node-app.fullname" . }}
+    app: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app:  {{ template "xendit-node-app.fullname" . }}
+      app:  {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
   template:
     metadata:
       labels:
-        app: {{ template "xendit-node-app.fullname" . }}
+        app: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
 {{- with .Values.podAnnotations }}
       annotations:
 {{ toYaml . | indent 8 }}
@@ -30,8 +29,9 @@ spec:
 {{ toYaml .Values.affinity | indent 8 }}
       {{- end }}
       containers:
-      - name: {{ template "xendit-node-app.fullname" . }}
+      - name: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
         image: "{{ .Values.image }}"
+        imagePullPolicy: Always
         readinessProbe:
           tcpSocket:
             port: {{ .Values.service.targetPort }}

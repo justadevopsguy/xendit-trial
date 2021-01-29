@@ -17,11 +17,11 @@ service:
 ## Configure resource requests and limits--> is this final? ask dev...
 resources:
   requests:
-    memory: 256Mi
+    memory: 100Mi
     cpu: 100m
   limits:
     cpu: "1"
-    memory: 500Mi
+    memory: 300Mi
 
 # Specify ENV Variables
 envs:

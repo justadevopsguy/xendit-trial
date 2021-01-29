@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "xendit-node-app.fullname" . }}
+  name: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
   namespace: {{ .Values.environment }}
   labels:
-    app: {{ template "xendit-node-app.fullname" . }}
+    app: {{ template "xendit-node-app.fullname" . }}-{{ .Values.version }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   type: {{ .Values.service.type }}

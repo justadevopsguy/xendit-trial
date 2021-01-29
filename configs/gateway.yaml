@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: xendit-internal-gateway
+  namespace: xendit-trial
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 8080
+        name: tcp-8080
+        protocol: HTTP
+      hosts:
+        - "xendit.node.aj.one"
+        - "xendit.node.aj.two"
+        - "xendit.node.aj.three"

@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: xendit-trial-v3
+  namespace: xendit-trial
+spec:
+  hosts:
+    - "xendit.node.aj.three"
+  gateways:
+    - xendit-trial/xendit-internal-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            port:
+              number: 8080
+            host: xendit-node-app-3.xendit-trial.svc.cluster.local
