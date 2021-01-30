@@ -52,7 +52,7 @@ app.use(mongooseMorgan({
 
 app.get('/', (req, res) => {
   const osResponse = `The OS Type is ${os.type()} with release ${os.release()} using platform ${os.platform()}`;
-  const trialResponse = `Xendit - Trial - Adrian Jerome Quiambao - 1 -28 -2021 - ${month} - ${date} - ${year} `;
+  const trialResponse = `Xendit - Trial - Test Commit - Adrian Jerome Quiambao - 1 -28 -2021 - ${month} - ${date} - ${year} `;
   const getCPUUsageResponse = `Current CPU usage is ${cpuPercent}%`;
   const getMemoryUsageResponse = `Current Memory usage ${Math.round(usedMemory * 100) / 100} MB`;
 
